@@ -7,6 +7,8 @@ const cd = $(".cd");
 const btnPlay = $('.btn-toggle-play');
 const player = $('.player');
 const progress = $('#progress');
+const nextBtn = $('.btn-next');
+const prevBtn = $('.btn-prev');
 const app = {
   currentIndex: 0,
   isPlaying: false,
@@ -50,7 +52,7 @@ const app = {
     {
       name: "Chua bao gio",
       singer: "Trung Quan idol",
-      path: "./assets/music/song3.mp3",
+      path: "./assets/music/song7.mp3",
       image: "./assets/img/song1.jpg",
     },
   ],
@@ -133,6 +135,17 @@ const app = {
         const seekTime = audio.duration / 100 * e.target.value;
         audio.currentTime = seekTime;  
     }
+    // khi next song
+    nextBtn.onclick = function() {
+      _this.nextSong();
+      audio.play();
+    }
+
+    //khi prev song
+    prevBtn.onclick = function() {
+      _this.prevSong();
+      audio.play();
+    }
   },
   loadCurrentSong: function () {
     // console.log(heading, cdThumb, audio)
@@ -141,7 +154,20 @@ const app = {
     cdThumb.style.backgroundImage = `url('${this.currentSong.image}')`;
     audio.src = this.currentSong.path;
   },
-
+  nextSong: function() {
+    this.currentIndex++;
+    if(this.currentIndex >= this.song.length){
+      this.currentIndex = 0;
+    }
+    this.loadCurrentSong();
+  },
+  prevSong: function() {
+    this.currentIndex--;
+    if(this.currentIndex < 0  ){
+      this.currentIndex = this.song.length -1;
+    }
+    this.loadCurrentSong();
+  },
   start: function () {
     //dinh nghia cac thuoc tinh cho object
     this.defineProperties();
