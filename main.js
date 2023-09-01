@@ -9,10 +9,32 @@ const player = $('.player');
 const progress = $('#progress');
 const nextBtn = $('.btn-next');
 const prevBtn = $('.btn-prev');
+const randomBtn = $('.btn-random');
+const repeatBtn = $('.btn-repeat')
 const app = {
   currentIndex: 0,
   isPlaying: false,
+  isRandom: false,
+  isRepeat: false,
   song: [
+    {
+      name: "Katharsis",
+      singer: "TK From",
+      path: "./assets/music/song0.mp3",
+      image: "./assets/img/song0.jpg",
+    },
+    {
+      name: "Unravel",
+      singer: "TK From",
+      path: "./assets/music/song0.1.mp3",
+      image: "./assets/img/song0.jpg",
+    },
+    {
+      name: "Unravel Piano",
+      singer: "TK From",
+      path: "./assets/music/song0.2.mp3",
+      image: "./assets/img/song0.2.jpg",
+    },
     {
       name: "Mot Ngan Noi Dau",
       singer: "Trung Quan idol",
@@ -57,9 +79,9 @@ const app = {
     },
   ],
   render: function () {
-    const htmls = this.song.map((song) => {
+    const htmls = this.song.map((song, index) => {
       return `
-      <div class="song">
+      <div class="song ${index === this.currentIndex ? 'active' : ''}">
         <div class="thumb" style="background-image: url('${song.image}')">
         </div>
         <div class="body">
@@ -135,16 +157,55 @@ const app = {
         const seekTime = audio.duration / 100 * e.target.value;
         audio.currentTime = seekTime;  
     }
+
     // khi next song
     nextBtn.onclick = function() {
-      _this.nextSong();
+      if(_this.isRandom) {
+        _this.randomSong();
+      }
+      else{
+        _this.nextSong();
+      }
       audio.play();
+      _this.render();
+      _this.scrollToActiveSong();
     }
 
     //khi prev song
     prevBtn.onclick = function() {
-      _this.prevSong();
+      if(_this.isRandom) {
+        _this.randomSong();
+      }
+      else{
+        _this.prevSong();
+      }
       audio.play();
+      _this.render();
+      _this.scrollToActiveSong();
+
+    }
+
+    // khi random song
+    randomBtn.onclick = function() {
+      _this.isRandom = !_this.isRandom;
+        randomBtn.classList.toggle('active', _this.isRandom);
+    }
+
+    // xu ly next song 
+    audio.onended = function() {
+      if(_this.isRepeat){
+        audio.play();
+      }else
+      nextBtn.click();
+      _this.scrollToActiveSong();
+
+    }
+
+    // xu ly repeat
+    repeatBtn.onclick = function() {
+      _this.isRepeat = !_this.isRepeat;
+      repeatBtn.classList.toggle('active', _this.isRepeat);
+      
     }
   },
   loadCurrentSong: function () {
@@ -168,6 +229,22 @@ const app = {
     }
     this.loadCurrentSong();
   },
+  randomSong: function() {
+    let newIndex;
+    do{
+      newIndex = Math.floor(Math.random() * this.song.length)
+    } while(newIndex === this.currentIndex)
+    this.currentIndex = newIndex;
+    this.loadCurrentSong();
+  },
+  scrollToActiveSong: function() {
+    setTimeout(()=>{
+    $('.song.active').scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    })
+    }, 100) 
+ },
   start: function () {
     //dinh nghia cac thuoc tinh cho object
     this.defineProperties();
