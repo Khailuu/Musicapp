@@ -10,7 +10,8 @@ const progress = $('#progress');
 const nextBtn = $('.btn-next');
 const prevBtn = $('.btn-prev');
 const randomBtn = $('.btn-random');
-const repeatBtn = $('.btn-repeat')
+const repeatBtn = $('.btn-repeat');
+const playList = $(".playlist");
 const app = {
   currentIndex: 0,
   isPlaying: false,
@@ -81,7 +82,7 @@ const app = {
   render: function () {
     const htmls = this.song.map((song, index) => {
       return `
-      <div class="song ${index === this.currentIndex ? 'active' : ''}">
+      <div class="song ${index === this.currentIndex ? 'active' : ''}" data-index="${index}">
         <div class="thumb" style="background-image: url('${song.image}')">
         </div>
         <div class="body">
@@ -94,7 +95,7 @@ const app = {
     </div>
     `;
     });
-    $(".playlist").innerHTML = htmls.join("");
+    playList.innerHTML = htmls.join("");
   },
   defineProperties: function () {
     Object.defineProperty(this, "currentSong", {
@@ -206,6 +207,21 @@ const app = {
       _this.isRepeat = !_this.isRepeat;
       repeatBtn.classList.toggle('active', _this.isRepeat);
       
+    }
+    //lang nghe click vao playlist
+    playList.onclick = function(e) {
+      const songNode = e.target.closest('.song:not(.active)')
+      if(songNode || e.target.closest('.option')){
+        // console.log(e.target)
+        // xu ly click song
+        if(songNode){
+          _this.currentIndex = Number(songNode.dataset.index);
+          _this.loadCurrentSong();  
+          _this.render();
+          audio.play();
+          
+        }
+      }
     }
   },
   loadCurrentSong: function () {
