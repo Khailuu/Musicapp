@@ -21,6 +21,12 @@ const app = {
     {
       name: "Katharsis",
       singer: "TK From",
+      path: "./assets/music/songn.mp3",
+      image: "./assets/img/songn.jpg",
+    },
+    {
+      name: "Katharsis",
+      singer: "TK From",
       path: "./assets/music/song0.mp3",
       image: "./assets/img/song0.jpg",
     },
@@ -199,7 +205,6 @@ const app = {
       }else
       nextBtn.click();
       _this.scrollToActiveSong();
-
     }
 
     // xu ly repeat
