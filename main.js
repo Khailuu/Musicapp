@@ -19,9 +19,9 @@ const app = {
   isRepeat: false,
   song: [
     {
-      name: "Katharsis",
-      singer: "TK From",
-      path: "./assets/music/songn.mp3",
+      name: "Nam mô quan thế âm bồ tát",
+      singer: "",
+      path: "./assets/music/songn1.mp3",
       image: "./assets/img/songn.jpg",
     },
     {
